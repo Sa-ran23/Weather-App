@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San_weather</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="main">
+        <div class="top">
+            <p class="we_name">Weather dashboard</p>
+            <h1 class="year" id="year">--</h1>
+        </div>
+        <div class="container">
+        <div class="box">
+            <div class="top_box">
+                <div class="city">
+                    <input type="text" placeholder="Search city" class="search" id="search">
+                    <button class="searchbtn" onclick="fetchWeather()">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+                <div class="show_city">
+                    <i class="fa-solid fa-location-dot dot"></i>
+                    <h1 class="city_name">--</h1>
+                </div>
+            </div>
+            <div class="center">
+                <div class="weather-text">
+                    <h1 class="weath">--</h1>
+                    <p class="desc">--- --</p>
+                </div>
+
+                <div class="weather-icon">
+                    <img src="weather/clear.png" alt="Weather Icon">
+                     <p class="temp">--</p>
+                </div>
+            </div>
+            <div class="bottom">
+            <div class="bot_left">
+                <img src="weather/humidity.png" alt="Humidity">
+                <div>
+                    <p class="value humadity">--</p>
+                    <p class="label">--</p>
+                </div>
+            </div>
+
+            <div class="bot_right">
+                <img src="weather/wind.png" alt="Wind">
+                <div>
+                    <p class="value wind">--</p>
+                    <p class="label">--</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+    </div>
+</body>
+</html>
+
+<script>
+
+const apiKey = 'bf20cee988de316fdb98720591318322'; 
+const apiUrl = 'https://api.openweathermap.org/data/2.5/weather?units=metric&q=';
+
+async function fetchWeather() {
+    const city = document.getElementById('search').value;
+    const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+    var data = await response.json();
+    console.log(data);
+
+    document.querySelector('.city_name').innerText = data.name;
+    document.querySelector('.temp').innerText = Math.round(data.main.temp) + '°C';
+    document.querySelector('.humadity').innerText = data.main.humidity + '%';
+    document.querySelector('.wind').innerText = data.wind.speed + ' km/h';
+
+    if(data.weather[0].main == 'Clouds') {
+        document.querySelector('.weath').innerText = 'Cloudy';
+        document.querySelector('.desc').innerText = data.weather[0].description;
+        document.querySelector('.weather-icon img').src = 'weather/clouds.png';
+        document.body.style.backgroundImage = "url('weather/cloudy.jfif')";
+    } else if(data.weather[0].main == 'Clear') {
+        document.querySelector('.weath').innerText = 'Clear';
+        document.querySelector('.desc').innerText = data.weather[0].description;
+        document.querySelector('.weather-icon img').src = 'weather/clear.png';
+        document.body.style.backgroundImage = "url('weather/clear.jpg')";
+    } else if(data.weather[0].main == 'Rain') {
+        document.querySelector('.weath').innerText = 'Rain';
+        document.querySelector('.desc').innerText = data.weather[0].description;
+        document.querySelector('.weather-icon img').src = 'weather/rain.png';
+        document.body.style.backgroundImage = "url('weather/rain2.jpg')";
+    } else if(data.weather[0].main == 'Drizzle') {
+        document.querySelector('.weath').innerText = 'Drizzle';
+        document.querySelector('.desc').innerText = data.weather[0].description;
+        document.querySelector('.weather-icon img').src = 'weather/drizzle.png';
+        document.body.style.backgroundImage = "url('weather/dizzle2.jpg')";
+    } else if(data.weather[0].main == 'Mist') {
+        document.querySelector('.weath').innerText = 'Mist';
+        document.querySelector('.desc').innerText = data.weather[0].description;
+        document.querySelector('.weather-icon img').src = 'weather/mist.png';
+        document.body.style.backgroundImage = "url('weather/mist.jfif')";
+    }else if(data.weather[0].main == 'Snow') {
+        document.querySelector('.weath').innerText = 'Snow';
+        document.querySelector('.desc').innerText = data.weather[0].description;
+        document.querySelector('.weather-icon img').src = 'weather/snow.png';
+        document.body.style.backgroundImage = "url('weather/snow.jfif')";
+    }
+
+}
+document.getElementById("year").innerText =
+    new Date().getFullYear();
+
+</script>
