@@ -170,6 +170,10 @@ body{
     margin: 0;
 }
 
+/* Utility to hide elements until needed */
+.hidden{
+    display: none !important;
+}
 /* Responsive adjustments */
 @media (max-width: 1200px) {
     .container {
