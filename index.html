@@ -10,8 +10,8 @@
 <body>
     <div class="main">
         <div class="top">
-            <p class="we_name">Weather dashboard</p>
-            <h1 class="year" id="year">--</h1>
+            <p class="we_name hidden">Weather dashboard</p>
+            <h1 class="year hidden" id="year">--</h1>
         </div>
         <div class="container">
         <div class="box">
@@ -22,12 +22,12 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
-                <div class="show_city">
+                <div class="show_city hidden">
                     <i class="fa-solid fa-location-dot dot"></i>
                     <h1 class="city_name">--</h1>
                 </div>
             </div>
-            <div class="center">
+            <div class="center hidden">
                 <div class="weather-text">
                     <h1 class="weath">--</h1>
                     <p class="desc">--- --</p>
@@ -38,7 +38,7 @@
                      <p class="temp">--</p>
                 </div>
             </div>
-            <div class="bottom">
+            <div class="bottom hidden">
             <div class="bot_left">
                 <img src="weather/humidity.png" alt="Humidity">
                 <div>
@@ -72,10 +72,24 @@ async function fetchWeather() {
     var data = await response.json();
     console.log(data);
 
+    // If API returns an error (e.g., city not found), show a message and keep details hidden
+    if (data.cod && Number(data.cod) !== 200) {
+        alert(data.message || 'City not found');
+        return;
+    }
+
+    // Populate values
     document.querySelector('.city_name').innerText = data.name;
     document.querySelector('.temp').innerText = Math.round(data.main.temp) + '°C';
     document.querySelector('.humadity').innerText = data.main.humidity + '%';
     document.querySelector('.wind').innerText = data.wind.speed + ' km/h';
+
+    // Reveal hidden UI sections now that we have valid data
+    document.querySelector('.we_name').classList.remove('hidden');
+    document.querySelector('.year').classList.remove('hidden');
+    document.querySelector('.show_city').classList.remove('hidden');
+    document.querySelector('.center').classList.remove('hidden');
+    document.querySelector('.bottom').classList.remove('hidden');
 
     if(data.weather[0].main == 'Clouds') {
         document.querySelector('.weath').innerText = 'Cloudy';
